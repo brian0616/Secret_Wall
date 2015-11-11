@@ -1,0 +1,109 @@
+<style type="text/css">
+#desc {
+  font-size: 10px;
+  text-align: center;
+}
+/*#content, #delete {
+  display: inline-block;
+}*/
+#nickname {
+  text-align: center;
+}
+</style>
+
+  <div class="row">
+  
+     
+    <div class="large-3 columns ">
+      <div class="panel">
+        <%if current_user %>
+        <h4 id='nickname'><a href="/users/<%= current_user.id %>"><%= current_user.nickname %></a></h4>
+        <p id='desc'>Click nickname to share your secrets</p>
+        <%end%>
+        
+        <br>
+      <div class="section-container vertical-nav" data-section data-options="deep_linking: false; one_up: true">
+          <section class="section">
+            <h5 class="title"><a href="/category/life">Life</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/love">Love</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/money">Money</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/relationships">Relationships</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/work">Work</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/sex">18+</a></h5>
+          </section>
+          <section class="section">
+            <h5 class="title"><a href="/category/other">Other</a></h5>
+          </section>
+        </div>
+ 
+ 
+      </div>
+    </div>
+    
+     
+     
+    <div class="large-9 columns">
+      <div class="row">
+        <div class="large-10 columns">
+
+
+            <% @sexes.each do |sex|%>
+            <p><b>"<%= sex.user.nickname %>"  said: - <%= sex.likes.count %> likes</b>
+             <br>
+             <%= sex.content%></p>
+
+            <!--  -->
+
+          <% if current_user %>
+            <% if current_user.id == sex.user_id %>
+               <form action='/secrets/<%= sex.id %>' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                <input type='hidden' name='_method' value='delete'>
+                <input type='submit' value='Delete' class='button alert round tiny'>
+              </form>
+            <%end%>
+         <%end%>
+
+            <% if current_user %>
+              <% if current_user.id != sex.user_id %>
+                <% if current_user.secrets_liked.include?(sex) %>
+                  <form action='/likes/<%= sex.id %>' method='post'>
+                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                    <input type='hidden' name='_method' value='patch'>
+                    <input type='submit' value='Unlike it' class='button secondary round tiny'>
+                  </form>
+              <% else %>
+              <form action='/likes' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                <input type='hidden' name='secret_id' value='<%= sex.id %>'>
+                <input type='submit' value='Like it !' class='button round tiny'>
+              </form>
+              <%end%>
+            <%end%>
+          <%end%>
+
+        <%end%>
+
+
+          </div>
+        </div>
+      </div>
+       
+ 
+      <hr/>
+       
+ 
+    </div>
+ 
+ 
+  </div>

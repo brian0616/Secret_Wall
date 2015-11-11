@@ -1,0 +1,68 @@
+<style type="text/css">
+textarea {
+	height: 140px;
+}
+#nickname, #desc {
+  text-align: center;
+}
+.profile {
+	text-align: center;
+}
+
+</style>
+
+ <div class="row">
+  
+     
+    <div class="large-3 columns ">
+      <div class="panel">
+        <%if current_user %>
+        <h4 id='nickname'><a href="/users/<%= current_user.id %>"><%= current_user.nickname %></a></h4>
+        <p id='desc'>Click nickname to share your secrets</p>
+        <p class='profile'>You shared</p>
+        <h4 class='profile'><%= current_user.secrets.count %></h4>
+        <p class='profile'>Secrets so far</p>
+        <%end%>
+        <br>
+          
+      </div>
+    </div>
+    
+
+     
+    <div class="large-9 columns">
+ 
+          <div id='form'>
+      <div class="row">
+        <div class="large-10 columns">
+        	<form action='/secrets' method='post'>
+        		<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+        		<select id='category' name='category'>
+        			<option>Choose Your Category</option>
+        			<option value='life'>Life</option>
+        			<option value='love'>Love</option>
+        			<option value='money'>Money</option>
+        			<option value='relationships'>Relationships</option>
+        			<option value='work'>Work</option>
+              <option value='sex'>18+</option>
+        			<option value='other'>Other</option>
+        		</select>
+        		<textarea id='content' name='content' placeholder="What is your secret? Share your secret here.."></textarea>
+        		<input type='submit' value='Submit Your Secret' class='large button expand'>	
+        	</form>
+        </div>
+      </div>
+       </div>
+ 
+      <hr/>
+
+ <% if @user_secrets %>
+ 	<% @user_secrets.each do |us| %>
+ 		<%= us.content %>
+ 	<% end %>
+ <% end %>
+ 
+  </div>
+
+ 
+  </div>
